@@ -42,48 +42,45 @@ We support running Slate in three different ways:
 * [Using Vagrant](https://github.com/slatedocs/slate/wiki/Using-Slate-in-Vagrant)
 * [Using Docker](https://github.com/slatedocs/slate/wiki/Using-Slate-in-Docker)
 
-Companies Using Slate
----------------------------------
+Provided in the slate repo is a Dockerfile you can use to run slate using [Docker](https://www.docker.com/). Docker is similar to Vagrant in that it provides a reproducible, portable development environment using virtualization, however it does not provide a full VM, rather piggy backing off the host, allowing for a slimmer installation profile than Vagrant / full VMs. However, Docker does come with a number of its own terms, and for beginners, we recommend looking at
+[this Glossary](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-terminology)
+to familiarize yourself with some of them.
 
-* [NASA](https://api.nasa.gov)
-* [Sony](http://developers.cimediacloud.com)
-* [Best Buy](https://bestbuyapis.github.io/api-documentation/)
-* [Travis-CI](https://docs.travis-ci.com/api/)
-* [Greenhouse](https://developers.greenhouse.io/harvest.html)
-* [WooCommerce](http://woocommerce.github.io/woocommerce-rest-api-docs/)
-* [Dwolla](https://docs.dwolla.com/)
-* [Clearbit](https://clearbit.com/docs)
-* [Coinbase](https://developers.coinbase.com/api)
-* [Parrot Drones](http://developer.parrot.com/docs/bebop/)
-* [Scale](https://docs.scaleapi.com/)
+## Dependencies
 
-You can view more in [the list on the wiki](https://github.com/slatedocs/slate/wiki/Slate-in-the-Wild).
+* [Docker](https://www.docker.com/), see [this page](https://www.docker.com/get-started) for installing Docker Desktop.
 
-Questions? Need Help? Found a bug?
---------------------
+## Getting Started
 
-If you've got questions about setup, deploying, special feature implementation in your fork, or just want to chat with the developer, please feel free to [start a thread in our Discussions tab](https://github.com/slatedocs/slate/discussions)!
+1. Fork this repository on Github.
+2. Clone *your forked repository* (not our original one) to your hard drive with `git clone https://github.com/YOURUSERNAME/slate.git`
+3. `cd slate`
+4. Build the docker image for slate: `docker build . -t slate`
 
-Found a bug with upstream Slate? Go ahead and [submit an issue](https://github.com/slatedocs/slate/issues). And, of course, feel free to submit pull requests with bug fixes or changes to the `dev` branch.
+## Running Slate
 
-Contributors
---------------------
+To start a container for slate, run:
 
-Slate was built by [Robert Lord](https://lord.io) while at [TripIt](https://www.tripit.com/). The project is now maintained by [Matthew Peveler](https://github.com/MasterOdin) and [Mike Ralphson](https://github.com/MikeRalphson).
+```
+docker run -d --rm --name slate -p 4567:4567 -v $(pwd)/build:/srv/slate/build -v $(pwd)/source:/srv/slate/source slate
+```
 
-Thanks to the following people who have submitted major pull requests:
+and you will be able to access your site at http://localhost:4567.
 
-- [@chrissrogers](https://github.com/chrissrogers)
-- [@bootstraponline](https://github.com/bootstraponline)
-- [@realityking](https://github.com/realityking)
-- [@cvkef](https://github.com/cvkef)
+To build your sources while the container is running, run:
 
-Also, thanks to [Sauce Labs](http://saucelabs.com) for sponsoring the development of the responsive styles.
+```
+docker exec -it slate /bin/bash -c "bundle exec middleman build"
+```
 
-Special Thanks
---------------------
-- [Middleman](https://github.com/middleman/middleman)
-- [jquery.tocify.js](https://github.com/gfranko/jquery.tocify.js)
-- [middleman-syntax](https://github.com/middleman/middleman-syntax)
-- [middleman-gh-pages](https://github.com/edgecase/middleman-gh-pages)
-- [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
+## Stopping Slate
+
+To stop the slate container, run:
+
+```bash
+docker stop slate
+```
+
+## What Now?
+
+The next step is to [learn how to edit `source/index.md` to change the content of your docs](Markdown-Syntax). Once your done, you might want to think about [deploying your docs](https://github.com/slatedocs/slate/wiki/Deploying-Slate).
